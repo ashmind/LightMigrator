@@ -1,0 +1,8 @@
+
+bin/
+obj/
+\#packages/
+*.suo
+*.user
+_ReSharper.*
+*.sln.ide/

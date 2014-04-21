@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CEBD0D86-67C7-4878-A3E7-6B64E261BE6A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LightMigrator.Database</RootNamespace>
+    <AssemblyName>LightMigrator.Database</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Argument">
+      <HintPath>..\#packages\Argument.1.0.0\lib\net45\Argument.dll</HintPath>
+    </Reference>
+    <Reference Include="AshMind.Extensions">
+      <HintPath>..\#packages\AshMind.Extensions.1.3.2\lib\net45\AshMind.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\#packages\JetBrains.Annotations.7.0\lib\net45\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DatabaseMigration.cs" />
+    <Compile Include="FluentInterface\ICollectionSyntax.cs" />
+    <Compile Include="FluentInterface\IObjectSyntax.cs" />
+    <Compile Include="FluentInterface\ISchemaSyntax.cs" />
+    <Compile Include="FluentInterface\ITableSyntax.cs" />
+    <Compile Include="SqlServer\DefaultSqlServerVersionTableDefinition.cs" />
+    <Compile Include="Internal\IDatabaseVersionTableDefinition.cs" />
+    <Compile Include="SqlServer\SqlServerVersionRepository.cs" />
+    <Compile Include="Internal\DatabaseMigrationScope.cs" />
+    <Compile Include="DatabaseMigrationException.cs" />
+    <Compile Include="FluentInterface\IDatabaseSyntax.cs" />
+    <Compile Include="IDatabaseMigrationContext.cs" />
+    <Compile Include="Internal\IDatabase.cs" />
+    <Compile Include="Internal\IDatabaseRollbackPlan.cs" />
+    <Compile Include="Internal\NaiveMultiDatabaseRollbackPlan.cs" />
+    <Compile Include="Internal\TransactionScopeDatabaseRollbackPlan.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServer\SqlServerDatabase.cs" />
+    <Compile Include="SqlServer\SqlServerSchema.cs" />
+    <Compile Include="SqlServer\SqlServerSchemaCollection.cs" />
+    <Compile Include="SqlServer\SqlServerTable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LightMigrator\LightMigrator.csproj">
+      <Project>{0AF32DFA-88DF-4510-B3EE-738BC2F636E9}</Project>
+      <Name>LightMigrator</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
