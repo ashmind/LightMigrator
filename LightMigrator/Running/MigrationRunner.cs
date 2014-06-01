@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AshMind.Extensions;
 using JetBrains.Annotations;
+using LightMigrator.Framework;
 using Serilog;
 
 namespace LightMigrator.Running {

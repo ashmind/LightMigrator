@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LightMigrator.Framework;
 
 namespace LightMigrator.Database.Tests.Integration.SqlServer.Migrations {
-    public class Migration_20140420_1_CreateTable : DatabaseMigration {
+    public class Migration_20140420_1_CreateTable : Migration {
         protected override void Migrate() {
             Database.ExecuteScript(@"
                 CREATE TABLE X1 (

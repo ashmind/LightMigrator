@@ -61,9 +61,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LightMigrator.Database\LightMigrator.Database.csproj">
-      <Project>{CEBD0D86-67C7-4878-A3E7-6B64E261BE6A}</Project>
-      <Name>LightMigrator.Database</Name>
+    <ProjectReference Include="..\Framework\Framework.csproj">
+      <Project>{5c9ff358-a22b-41d4-b5f7-1a7359db21af}</Project>
+      <Name>Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\LightMigrator\LightMigrator.csproj">
       <Project>{0AF32DFA-88DF-4510-B3EE-738BC2F636E9}</Project>

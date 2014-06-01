@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using LightMigrator.Framework;
 
 namespace LightMigrator.Running {
     public class MigrationInfo {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using AshMind.Extensions;
+using LightMigrator.Framework;
 
 namespace LightMigrator.Running {
     public class ConventionBasedMigrationPlanner: IMigrationPlanner {
