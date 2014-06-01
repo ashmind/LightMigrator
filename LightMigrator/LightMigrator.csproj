@@ -69,7 +69,7 @@
     <Compile Include="IMigration.cs" />
     <Compile Include="Running\MigrationRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Running\PlannedMigration.cs" />
+    <Compile Include="Running\MigrationInfo.cs" />
     <Compile Include="Running\ReflectionDiscovery.cs" />
   </ItemGroup>
   <ItemGroup>

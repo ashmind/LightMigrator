@@ -3,6 +3,6 @@ using JetBrains.Annotations;
 
 namespace LightMigrator.Running {
     public interface IMigrationPlanner {
-        [NotNull] IEnumerable<PlannedMigration> Plan([NotNull] IEnumerable<IMigration> migrations);
+        [NotNull] IEnumerable<MigrationInfo> Plan([NotNull] IEnumerable<IMigration> migrations);
     }
 }

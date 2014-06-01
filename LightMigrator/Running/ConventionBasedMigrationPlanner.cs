@@ -13,15 +13,15 @@ namespace LightMigrator.Running {
             _discovery = discovery;
         }
 
-        public IEnumerable<PlannedMigration> Plan(IEnumerable<IMigration> migrations) {
+        public IEnumerable<MigrationInfo> Plan(IEnumerable<IMigration> migrations) {
             var migrationsByEvent = new Dictionary<MigrationEvent, IList<IMigration>>();
             var migrationsByVersion = new SortedDictionary<string, IMigration>();
             ClassifyMigrations(migrations, migrationsByVersion, migrationsByEvent);
 
-            var results = new List<PlannedMigration>();
-            results.AddRange(migrationsByEvent.GetValueOrDefault(MigrationEvent.BeforeAll).EmptyIfNull().Select(m => new PlannedMigration(m)));
-            results.AddRange(migrationsByVersion.Select(versioned => new PlannedMigration(versioned.Value, versioned.Key)));
-            results.AddRange(migrationsByEvent.GetValueOrDefault(MigrationEvent.AfterAll).EmptyIfNull().Select(m => new PlannedMigration(m)));
+            var results = new List<MigrationInfo>();
+            results.AddRange(migrationsByEvent.GetValueOrDefault(MigrationEvent.BeforeAll).EmptyIfNull().Select(m => new MigrationInfo(m)));
+            results.AddRange(migrationsByVersion.Select(versioned => new MigrationInfo(versioned.Value, versioned.Key)));
+            results.AddRange(migrationsByEvent.GetValueOrDefault(MigrationEvent.AfterAll).EmptyIfNull().Select(m => new MigrationInfo(m)));
 
             return results;
         }

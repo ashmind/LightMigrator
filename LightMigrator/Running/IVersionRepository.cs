@@ -7,6 +7,6 @@ namespace LightMigrator.Running {
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Global
         [NotNull] IReadOnlyCollection<string> GetAllVersions();
-        void SaveVersion([NotNull] PlannedMigration migration);
+        void SaveVersion([NotNull] MigrationInfo migrationInfo);
     }
 }

@@ -35,8 +35,8 @@ namespace LightMigrator.Database.SqlServer {
             return _database.ExecuteReader("SELECT " + _tableDefinition.VersionColumnName + " FROM " + _table.FullNameEscaped, reader => reader.GetString(0)).ToList().AsReadOnly();
         }
 
-        public void SaveVersion(PlannedMigration migration) {
-            Argument.NotNull("migration", migration);
+        public void SaveVersion(MigrationInfo migrationInfo) {
+            Argument.NotNull("migrationInfo", migrationInfo);
 
             var columnsAndValues = new Dictionary<string, string> {{_tableDefinition.VersionColumnName, "@Version"}};
             if (_tableDefinition.NameColumnName != null)
@@ -52,7 +52,7 @@ namespace LightMigrator.Database.SqlServer {
             var valuesSql = string.Join(", ", columnsAndValues.Values);
             var sql = "INSERT INTO " + _table.FullNameEscaped + " ( " + columnsSql + " ) VALUES ( " + valuesSql + " )";
             
-            _database.ExecuteNonQuery(sql, new { migration.GetType().Name, migration.Version });
+            _database.ExecuteNonQuery(sql, new { migrationInfo.GetType().Name, migrationInfo.Version });
         }
     }
 }

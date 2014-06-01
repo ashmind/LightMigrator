@@ -4,11 +4,11 @@ using System.Linq;
 using JetBrains.Annotations;
 
 namespace LightMigrator.Running {
-    public class PlannedMigration {
+    public class MigrationInfo {
         [NotNull] public IMigration Migration { get; private set; }
-        [CanBeNull] public string Version { get; private set; }
+        [CanBeNull] public string Version     { get; private set; }
 
-        public PlannedMigration(IMigration migration, [CanBeNull] string version = null) {
+        public MigrationInfo([NotNull] IMigration migration, [CanBeNull] string version = null) {
             Migration = Argument.NotNull("migration", migration);
             Version = version;
         }
