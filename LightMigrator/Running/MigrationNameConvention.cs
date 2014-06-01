@@ -4,35 +4,53 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using LightMigrator.Framework;
+using LightMigrator.Framework.Conventions;
+using LightMigrator.Framework.Internal;
 
 namespace LightMigrator.Running {
+    [ThreadSafe]
     public class MigrationNameConvention : IMigrationConvention {
-        [NotNull] private readonly Regex _nameRegex;
-        [NotNull] private readonly Regex _eventRegex;
-
-        public MigrationNameConvention([NotNull] Regex nameRegex, [NotNull] Regex eventRegex) {
-            _nameRegex = Argument.NotNull("nameRegex", nameRegex);
-            _eventRegex = Argument.NotNull("eventRegex", eventRegex);
+        public static class RegexGroupNames {
+            public const string Version = "version";
+            public const string Stage = "stage";
         }
 
-        public string GetVersion(IMigration migration) {
-            Argument.NotNull("migration", migration);
+        [NotNull] private readonly Regex _regex;
+        private readonly bool _hasStageGroup;
 
-            var match = _nameRegex.Match(migration.GetType().Name);
-            if (!match.Success)
-                return null;
-
-            return match.Groups[1].Value;
+        public MigrationNameConvention([NotNull] Regex regex) {
+            Argument.NotNull("regex", regex);
+            var groupNames = regex.GetGroupNames();
+            if (!groupNames.Contains("version"))
+                throw new ArgumentException(string.Format("Regex /{0}/ must define a capture named '{1}'.", regex, RegexGroupNames.Version));
+            
+            _regex = regex;
+            _hasStageGroup = groupNames.Contains(RegexGroupNames.Stage);
         }
 
-        public MigrationEvent? GetEvent(IMigration migration) {
+        public MigrationInfo GetInfo(IMigration migration) {
             Argument.NotNull("migration", migration);
 
-            var match = _eventRegex.Match(migration.GetType().Name);
+            var name = migration.GetType().Name;
+            var match = _regex.Match(name);
             if (!match.Success)
-                return null;
+                throw new MigrationException(string.Format("Migration name '{0}' did not match convention regex /{1}/.", name, _regex));
 
-            return (MigrationEvent)Enum.Parse(typeof(MigrationEvent), match.Groups[1].Value);
+            var versionGroup = match.Groups[RegexGroupNames.Version].NotNull();
+            if (versionGroup.Success)
+                return new MigrationInfo(migration, versionGroup.Value);
+
+            if (_hasStageGroup) {
+                var stageGroup = match.Groups[RegexGroupNames.Stage].NotNull();
+                
+                if (stageGroup.Success)
+                    return new MigrationInfo(migration, (MigrationStage)Enum.Parse(typeof(MigrationStage), stageGroup.Value));
+            }
+
+            throw new MigrationException(string.Format(
+                "Migration name '{0}' matched convention regex /{1}/, but neither '{2}' or '{3}' matched.",
+                name, _regex, RegexGroupNames.Version, RegexGroupNames.Stage
+            ));
         }
     }
 }

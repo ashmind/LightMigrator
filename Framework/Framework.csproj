@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Argument">
-      <HintPath>..\#packages\Argument.1.0.0\lib\net45\Argument.dll</HintPath>
+    <Reference Include="Argument, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\#packages\Argument.1.0.2\lib\net45\Argument.dll</HintPath>
     </Reference>
     <Reference Include="AshMind.Extensions">
       <HintPath>..\#packages\AshMind.Extensions.1.4.1\lib\net45\AshMind.Extensions.dll</HintPath>
@@ -55,9 +56,12 @@
     <Compile Include="FluentInterface\ITableSyntax.cs" />
     <Compile Include="IMigration.cs" />
     <Compile Include="IMigrationContext.cs" />
-    <Compile Include="IMigrationConvention.cs" />
+    <Compile Include="Conventions\IMigrationConvention.cs" />
+    <Compile Include="Internal\AgentHeisenbug.Annotations.cs" />
+    <Compile Include="Internal\EnsureExtensions.cs" />
     <Compile Include="Migration.cs" />
-    <Compile Include="MigrationEvent.cs" />
+    <Compile Include="Conventions\MigrationInfo.cs" />
+    <Compile Include="MigrationStage.cs" />
     <Compile Include="MigrationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using LightMigrator.Framework.Conventions;
 
 namespace LightMigrator.Running {
     public interface IVersionRepository {

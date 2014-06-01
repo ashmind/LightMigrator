@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace LightMigrator.Framework {
     [PublicAPI]
-    public enum MigrationEvent {
+    public enum MigrationStage {
         BeforeAll,
         AfterAll
     }

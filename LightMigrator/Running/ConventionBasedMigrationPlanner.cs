@@ -4,54 +4,45 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using AshMind.Extensions;
+using JetBrains.Annotations;
 using LightMigrator.Framework;
+using LightMigrator.Framework.Conventions;
 
 namespace LightMigrator.Running {
     public class ConventionBasedMigrationPlanner: IMigrationPlanner {
-        private readonly IDiscovery _discovery;
+        [NotNull] private readonly IDiscovery _discovery;
 
-        public ConventionBasedMigrationPlanner(IDiscovery discovery) {
-            _discovery = discovery;
+        public ConventionBasedMigrationPlanner([NotNull] IDiscovery discovery) {
+            _discovery = Argument.NotNull("discovery", discovery);
         }
 
         public IEnumerable<MigrationInfo> Plan(IEnumerable<IMigration> migrations) {
-            var migrationsByEvent = new Dictionary<MigrationEvent, IList<IMigration>>();
-            var migrationsByVersion = new SortedDictionary<string, IMigration>();
-            ClassifyMigrations(migrations, migrationsByVersion, migrationsByEvent);
+            var resolved = Resolve(migrations);
+            var ordered = resolved.OrderBy(m => {
+                if (m.Stage == MigrationStage.BeforeAll)
+                    return -1;
 
-            var results = new List<MigrationInfo>();
-            results.AddRange(migrationsByEvent.GetValueOrDefault(MigrationEvent.BeforeAll).EmptyIfNull().Select(m => new MigrationInfo(m)));
-            results.AddRange(migrationsByVersion.Select(versioned => new MigrationInfo(versioned.Value, versioned.Key)));
-            results.AddRange(migrationsByEvent.GetValueOrDefault(MigrationEvent.AfterAll).EmptyIfNull().Select(m => new MigrationInfo(m)));
+                if (m.Stage == MigrationStage.AfterAll)
+                    return 1;
 
-            return results;
+                return 0;
+            }).ThenBy(m => m.Version);
+
+            return ordered;
         }
 
-        private void ClassifyMigrations(IEnumerable<IMigration> migrations, IDictionary<string, IMigration> migrationsByVersion, IDictionary<MigrationEvent, IList<IMigration>> migrationsByEvent) {
+        [NotNull]
+        private IEnumerable<MigrationInfo> Resolve([NotNull] IEnumerable<IMigration> migrations) {
             var conventionCache = new Dictionary<Assembly, IMigrationConvention>();
             foreach (var migration in migrations) {
                 var convention = conventionCache.GetOrAdd(migration.GetType().Assembly, a => _discovery.Discover(a, CreateDefaultConvention));
-
-                var version = convention.GetVersion(migration);
-                if (version != null) {
-                    migrationsByVersion.Add(version, migration);
-                    continue;
-                }
-
-                var @event = convention.GetEvent(migration);
-                if (@event != null) {
-                    migrationsByEvent.GetOrAdd(@event.Value, e => new List<IMigration>());
-                    continue;
-                }
-
-                throw new MigrationException("Cannot identify either version or event for migration " + migration + ".");
+                yield return convention.GetInfo(migration);
             }
         }
 
         protected virtual IMigrationConvention CreateDefaultConvention() {
             return new MigrationNameConvention(
-                new Regex(@"Migration_?(\d+)"),
-                new Regex("((?:Before|After)All)(?![A-Za-z])")
+                new Regex(@"(?:Migration_?(?<version>\d+)|(?<stage>(?:Before|After)All)(?![A-Za-z]))")
             );
         }
     }
