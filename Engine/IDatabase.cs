@@ -5,7 +5,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using LightMigrator.Framework.FluentInterface;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public interface IDatabase : IDatabaseSyntax {
         [NotNull] string ConnectionString { get; }
         [NotNull] IRollbackPlan RollbackPlan { get; }

@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 using LightMigrator.Framework;
 using LightMigrator.Framework.Conventions;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public class ConventionBasedMigrationPlanner: IMigrationPlanner {
         [NotNull] private readonly IDiscovery _discovery;
 

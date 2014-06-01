@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using LightMigrator.Running;
+using LightMigrator.Engine;
 using LightMigrator.SqlServer;
 using Serilog;
 using Xunit;

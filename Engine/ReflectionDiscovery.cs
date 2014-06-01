@@ -5,7 +5,7 @@ using System.Reflection;
 using AshMind.Extensions;
 using JetBrains.Annotations;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class ReflectionDiscovery : IDiscovery {
         public IReadOnlyCollection<T> DiscoverAll<T>(Assembly assembly) 

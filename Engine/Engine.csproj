@@ -7,8 +7,8 @@
     <ProjectGuid>{0AF32DFA-88DF-4510-B3EE-738BC2F636E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightMigrator</RootNamespace>
-    <AssemblyName>LightMigrator</AssemblyName>
+    <RootNamespace>LightMigrator.Engine</RootNamespace>
+    <AssemblyName>LightMigrator.Engine</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -57,22 +57,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Running\MigrationScope.cs" />
-    <Compile Include="Running\IDatabase.cs" />
-    <Compile Include="Running\IRollbackPlan.cs" />
-    <Compile Include="Running\IVersionTableDefinition.cs" />
-    <Compile Include="Running\NaiveMultiRollbackPlan.cs" />
-    <Compile Include="Running\TransactionScopeRollbackPlan.cs" />
-    <Compile Include="Running\ConventionBasedMigrationPlanner.cs" />
-    <Compile Include="Running\IMigrationRunner.cs" />
-    <Compile Include="Running\MigrationNameConvention.cs" />
-    <Compile Include="Running\IDiscovery.cs" />
-    <Compile Include="Running\IMigrationPlanner.cs" />
-    <Compile Include="Running\IVersionRepository.cs" />
-    <Compile Include="Running\IMigrationScope.cs" />
-    <Compile Include="Running\MigrationRunner.cs" />
+    <Compile Include="MigrationScope.cs" />
+    <Compile Include="IDatabase.cs" />
+    <Compile Include="IRollbackPlan.cs" />
+    <Compile Include="IVersionTableDefinition.cs" />
+    <Compile Include="NaiveMultiRollbackPlan.cs" />
+    <Compile Include="TransactionScopeRollbackPlan.cs" />
+    <Compile Include="ConventionBasedMigrationPlanner.cs" />
+    <Compile Include="IMigrationRunner.cs" />
+    <Compile Include="MigrationNameConvention.cs" />
+    <Compile Include="IDiscovery.cs" />
+    <Compile Include="IMigrationPlanner.cs" />
+    <Compile Include="IVersionRepository.cs" />
+    <Compile Include="IMigrationScope.cs" />
+    <Compile Include="MigrationRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Running\ReflectionDiscovery.cs" />
+    <Compile Include="ReflectionDiscovery.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

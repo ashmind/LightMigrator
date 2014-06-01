@@ -1,7 +1,7 @@
 ﻿using System;
 using LightMigrator.Framework;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public interface IMigrationScope : IMigrationContext, IDisposable {
         void Complete();
     }

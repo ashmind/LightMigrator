@@ -4,7 +4,7 @@ using System.Linq;
 using System.Transactions;
 using JetBrains.Annotations;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public class TransactionScopeRollbackPlan : IRollbackPlan {
         [NotNull] private TransactionScope _scope;
 

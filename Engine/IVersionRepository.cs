@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using LightMigrator.Framework.Conventions;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public interface IVersionRepository {
         void Prepare();
 

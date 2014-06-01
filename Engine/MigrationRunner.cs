@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 using LightMigrator.Framework;
 using Serilog;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public class MigrationRunner : IMigrationRunner {
         [NotNull] private readonly IDiscovery _discovery;
         [NotNull] private readonly IMigrationPlanner _planner;

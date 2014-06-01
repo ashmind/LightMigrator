@@ -58,7 +58,7 @@
       <Project>{5c9ff358-a22b-41d4-b5f7-1a7359db21af}</Project>
       <Name>Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LightMigrator\LightMigrator.csproj">
+    <ProjectReference Include="..\Engine\Engine.csproj">
       <Project>{0af32dfa-88df-4510-b3ee-738bc2f636e9}</Project>
       <Name>LightMigrator</Name>
     </ProjectReference>

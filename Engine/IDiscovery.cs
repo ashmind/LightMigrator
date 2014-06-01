@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public interface IDiscovery {
         [NotNull]
         IReadOnlyCollection<T> DiscoverAll<T>([NotNull] Assembly assembly) 

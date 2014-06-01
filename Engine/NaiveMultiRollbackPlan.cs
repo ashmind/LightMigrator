@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AshMind.Extensions;
 using JetBrains.Annotations;
-using LightMigrator.Running;
 
-namespace LightMigrator.Database.Internal {
+namespace LightMigrator.Engine {
     [PublicAPI]
     public class NaiveMultiRollbackPlan : IRollbackPlan {
         private readonly IEnumerable<IRollbackPlan> _rollbackPlans;

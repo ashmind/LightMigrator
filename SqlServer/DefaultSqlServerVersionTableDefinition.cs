@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LightMigrator.Running;
+using LightMigrator.Engine;
 
 namespace LightMigrator.SqlServer {
     public class DefaultSqlServerVersionTableDefinition : IVersionTableDefinition {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using JetBrains.Annotations;
+using LightMigrator.Engine;
 using LightMigrator.Framework.FluentInterface;
-using LightMigrator.Running;
 
 namespace LightMigrator.SqlServer {
     public class SqlServerSchema : ISchemaSyntax {

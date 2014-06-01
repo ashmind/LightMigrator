@@ -7,7 +7,7 @@ using LightMigrator.Framework;
 using LightMigrator.Framework.Conventions;
 using LightMigrator.Framework.Internal;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     [ThreadSafe]
     public class MigrationNameConvention : IMigrationConvention {
         public static class RegexGroupNames {

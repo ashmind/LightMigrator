@@ -5,9 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
+using LightMigrator.Engine;
 using LightMigrator.Framework;
 using LightMigrator.Framework.FluentInterface;
-using LightMigrator.Running;
 
 namespace LightMigrator.SqlServer {
     [PublicAPI]

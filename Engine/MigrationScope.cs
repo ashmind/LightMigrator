@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using LightMigrator.Database.Internal;
 using LightMigrator.Framework.FluentInterface;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public class MigrationScope : IMigrationScope {
         [NotNull] private readonly IRollbackPlan _overallRollbackPlan;
         private bool _completed;

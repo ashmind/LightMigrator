@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public interface IVersionTableDefinition {
         [NotNull] string SchemaName { get; }
         [NotNull] string TableName { get; }

@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using LightMigrator.Framework;
 using LightMigrator.Framework.Conventions;
 
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public interface IMigrationPlanner {
         [Pure] [NotNull] IEnumerable<MigrationInfo> Plan([NotNull] IEnumerable<IMigration> migrations);
     }

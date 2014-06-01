@@ -1,4 +1,4 @@
-namespace LightMigrator.Running {
+namespace LightMigrator.Engine {
     public interface IRollbackPlan {
         void Prepare();
         void Rollback();
