@@ -73,12 +73,6 @@
     <Compile Include="Running\MigrationRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Running\ReflectionDiscovery.cs" />
-    <Compile Include="SqlServer\DefaultSqlServerVersionTableDefinition.cs" />
-    <Compile Include="SqlServer\SqlServerDatabase.cs" />
-    <Compile Include="SqlServer\SqlServerSchema.cs" />
-    <Compile Include="SqlServer\SqlServerSchemaCollection.cs" />
-    <Compile Include="SqlServer\SqlServerTable.cs" />
-    <Compile Include="SqlServer\SqlServerVersionRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

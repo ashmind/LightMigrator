@@ -5,7 +5,6 @@ using System.Linq;
 using LightMigrator.SqlServer;
 using Serilog;
 using Xunit;
-using LightMigrator.Database.Internal;
 using LightMigrator.Running;
 
 namespace LightMigrator.Database.Tests.Integration {

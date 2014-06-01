@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightMigrator.Database.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "Framework\Framework.csproj", "{5C9FF358-A22B-41D4-B5F7-1A7359DB21AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServer", "SqlServer\SqlServer.csproj", "{512C03E6-406A-4398-A6F1-1D3C2D06BF9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5C9FF358-A22B-41D4-B5F7-1A7359DB21AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C9FF358-A22B-41D4-B5F7-1A7359DB21AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C9FF358-A22B-41D4-B5F7-1A7359DB21AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{512C03E6-406A-4398-A6F1-1D3C2D06BF9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{512C03E6-406A-4398-A6F1-1D3C2D06BF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{512C03E6-406A-4398-A6F1-1D3C2D06BF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{512C03E6-406A-4398-A6F1-1D3C2D06BF9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
