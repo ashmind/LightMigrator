@@ -7,8 +7,8 @@
     <ProjectGuid>{64D96346-5CDC-440F-82F4-BE1CEB3A3B47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightMigrator.Database.Tests</RootNamespace>
-    <AssemblyName>LightMigrator.Database.Tests</AssemblyName>
+    <RootNamespace>LightMigrator.Tests</RootNamespace>
+    <AssemblyName>LightMigrator.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

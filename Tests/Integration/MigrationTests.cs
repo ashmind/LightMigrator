@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using LightMigrator.Running;
 using LightMigrator.SqlServer;
 using Serilog;
 using Xunit;
-using LightMigrator.Running;
 
-namespace LightMigrator.Database.Tests.Integration {
+namespace LightMigrator.Tests.Integration {
     public class MigrationTests {
         [Fact]
         public void Test() {

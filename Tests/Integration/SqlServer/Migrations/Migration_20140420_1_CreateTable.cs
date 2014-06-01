@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LightMigrator.Framework;
 
-namespace LightMigrator.Database.Tests.Integration.SqlServer.Migrations {
+namespace LightMigrator.Tests.Integration.SqlServer.Migrations {
     public class Migration_20140420_1_CreateTable : Migration {
         protected override void Migrate() {
             Database.ExecuteScript(@"
