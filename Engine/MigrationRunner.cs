@@ -12,16 +12,10 @@ namespace LightMigrator.Engine {
     [PublicAPI]
     public class MigrationRunner : IMigrationRunner {
         [NotNull] private readonly Func<IMigrationScope> _scopeFactory;
-        [NotNull] private readonly Func<MigrationHistoryTableDefinition, IMigrationHistoryRepository> _historyRepositoryFactory;
         [NotNull] private readonly ILogger _logger;
 
-        public MigrationRunner(
-            [NotNull] Func<IMigrationScope> scopeFactory,
-            [NotNull] Func<MigrationHistoryTableDefinition, IMigrationHistoryRepository> historyRepositoryFactory,
-            [NotNull] ILogger logger
-        ) {
+        public MigrationRunner([NotNull] Func<IMigrationScope> scopeFactory, [NotNull] ILogger logger) {
             _scopeFactory = Argument.NotNull("scopeFactory", scopeFactory);
-            _historyRepositoryFactory = Argument.NotNull("historyRepositoryFactory", historyRepositoryFactory);
             _logger = Argument.NotNull("logger", logger);
         }
 
@@ -42,11 +36,17 @@ namespace LightMigrator.Engine {
         }
 
         private void Run([NotNull] IEnumerable<IMigration> migrations, [NotNull] MigrationConfiguration configuration) {
-           using (var scope = _scopeFactory()) {
-                var historyRepository = _historyRepositoryFactory(configuration.HistoryTableProvider(scope.Databases[scope.PrimaryDatabaseName]));
-                historyRepository.Prepare();
+            using (var scope = _scopeFactory()) {
+                // ReSharper disable once PossibleNullReferenceException
+                var historyDatabase = scope.Databases[scope.PrimaryDatabaseName];
+                var historyRepository = ((IDatabase)historyDatabase).HistoryRepository;
+                var historyTable = configuration.HistoryTableOverride(historyRepository.DefaultTableDefinition);
+                if (historyTable == null)
+                    LogAndThrow("MigrationConfiguration.HistoryTableOverride returned null.", "Incorrect history table override (returned null).");
 
-                var alreadyRun = historyRepository.GetVersions().ToSet();
+                historyRepository.EnsureTable(historyTable);
+
+                var alreadyRun = historyRepository.GetVersions(historyTable).ToSet();
 
                 foreach (var migration in migrations) {
                     if (migration == null) {
@@ -71,7 +71,7 @@ namespace LightMigrator.Engine {
                         throw new MigrationException("Migration " + migration + " failed: " + ex.Message, ex);
                     }
 
-                    historyRepository.Save(info);
+                    historyRepository.Save(historyTable, info);
                     _logger.Information("Migration {$migration} completed.", migration);
                 }
 

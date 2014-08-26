@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using LightMigrator.Engine;
+using LightMigrator.Engine.Internal;
 using LightMigrator.Framework;
 using LightMigrator.Framework.FluentInterface;
 using LightMigrator.Framework.Internal;
@@ -24,16 +25,22 @@ namespace LightMigrator.SqlServer {
             ConnectionString = Argument.NotNull("connectionString", connectionString);
             // ReSharper disable once AssignNullToNotNullAttribute
             RollbackPlan = Argument.NotNull("rollbackPlanFactory", rollbackPlanFactory).Invoke(this);
+            HistoryRepository = CreateHistoryRepository();
 
             _master = name == "master"
                     ? this
                     : new SqlServerDatabase(new SqlConnectionStringBuilder(ConnectionString) {InitialCatalog = "master"}.ToString(), rollbackPlanFactory);
         }
 
+        [NotNull]
+        protected virtual IMigrationHistoryRepository CreateHistoryRepository() {
+            return new SqlServerHistoryRepository(this);
+        }
+
         public string Name { get; private set; }
         public string ConnectionString { get; private set; }
-
         public IRollbackPlan RollbackPlan { get; private set; }
+        public IMigrationHistoryRepository HistoryRepository { get; private set; }
 
         public bool Exists() {
             // ReSharper disable once PossibleNullReferenceException
@@ -156,13 +163,5 @@ namespace LightMigrator.SqlServer {
                 command.Parameters.Add(parameter);
             }
         }
-
-        #region IDefaultHistoryTableDefinitionProvider Members
-
-        MigrationHistoryTableDefinition IDefaultHistoryTableDefinitionProvider.GetDefaultHistoryTableDefinition() {
-            return new SqlServerHistoryTableDefinition();
-        }
-
-        #endregion
     }
 }

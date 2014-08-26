@@ -56,7 +56,6 @@
     <Compile Include="FluentInterface\IObjectSyntax.cs" />
     <Compile Include="FluentInterface\ISchemaSyntax.cs" />
     <Compile Include="FluentInterface\ITableSyntax.cs" />
-    <Compile Include="Internal\IDefaultHistoryTableDefinitionProvider.cs" />
     <Compile Include="MigrationHistoryTableDefinition.cs" />
     <Compile Include="IMigration.cs" />
     <Compile Include="IMigrationContext.cs" />

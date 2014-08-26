@@ -71,7 +71,6 @@
     <Compile Include="IMigrationScope.cs" />
     <Compile Include="MigrationRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Internal\MigrationHistoryRepositoryBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

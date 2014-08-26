@@ -21,8 +21,5 @@ namespace LightMigrator.Framework {
         [CanBeNull] public string NameColumnName { get; set; }
         [CanBeNull] public string DateColumnName { get; set; }
         [CanBeNull] public string UserColumnName { get; set; }
-
-        // Temporary, while here is no fluent interface for CREATE
-        [NotNull] public string CreateScript { get;set; }
     }
 }

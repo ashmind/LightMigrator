@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using JetBrains.Annotations;
 using LightMigrator.Framework;
 
 namespace LightMigrator.SqlServer {
@@ -12,18 +14,27 @@ namespace LightMigrator.SqlServer {
             NameColumnName = "Name";
             DateColumnName = "DateUtc";
             UserColumnName = "User";
+        }
 
-            CreateScript = @"
-                CREATE TABLE dbo.MigrationHistory (
-                    Id      int          NOT NULL IDENTITY(1,1),
-                    Version varchar(32)  NOT NULL,
-                    Name    varchar(128) NOT NULL,
-                    DateUtc datetime     NOT NULL,
-                    [User]  varchar(128) NOT NULL,
+        [NotNull]
+        public virtual string GetCreateScript() {
+            var script = new StringBuilder();
+            script.AppendFormat("CREATE TABLE [{0}].[{1}] (", SchemaName, TableName).AppendLine();
+            script.AppendLine("    Id int NOT NULL IDENTITY(1,1) CONSTRAINT PK_Version PRIMARY KEY,");
+            script.AppendFormat("    [{0}] nvarchar(32) NOT NULL", VersionColumnName).AppendLine();
 
-                    CONSTRAINT PK_Version PRIMARY KEY (Id)
-                )
-            ";
+            if (NameColumnName != null)
+                script.Append(",").AppendLine().AppendFormat("    [{0}] nvarchar(32) NOT NULL", NameColumnName).AppendLine();
+
+            if (DateColumnName != null)
+                script.Append(",").AppendLine().AppendFormat("    [{0}] datetime NOT NULL", DateColumnName).AppendLine();
+
+            if (UserColumnName != null)
+                script.Append(",").AppendLine().AppendFormat("    [{0}] nvarchar(128) NOT NULL", UserColumnName).AppendLine();
+
+            script.AppendLine().Append(")");
+
+            return script.ToString();
         }
     }
 }

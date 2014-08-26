@@ -54,7 +54,7 @@
     <Compile Include="SqlServerSchema.cs" />
     <Compile Include="SqlServerSchemaCollection.cs" />
     <Compile Include="SqlServerTable.cs" />
-    <Compile Include="SqlServerVersionRepository.cs" />
+    <Compile Include="SqlServerHistoryRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Framework\Framework.csproj">

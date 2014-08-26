@@ -20,12 +20,7 @@ namespace LightMigrator.Tests.Integration {
                 database.Drop();
             database.Create();
 
-            var runner = new MigrationRunner(
-                () => new MigrationScope(database),
-                definition => new SqlServerHistoryRepository(database, definition), 
-                Log.ForContext(GetType())
-            );
-
+            var runner = new MigrationRunner(() => new MigrationScope(database), Log.ForContext(GetType()));
             runner.Run(GetType().Assembly);
 
             Assert.True(database.Tables["X1"].Exists());

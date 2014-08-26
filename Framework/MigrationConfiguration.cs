@@ -5,23 +5,17 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using AshMind.Extensions;
 using JetBrains.Annotations;
-using LightMigrator.Framework.FluentInterface;
-using LightMigrator.Framework.Internal;
 
 namespace LightMigrator.Framework {
     public class MigrationConfiguration {
         [NotNull] private Func<Assembly, IEnumerable<IMigration>> _migrationProvider;
         [NotNull] private Func<IMigration, string> _versionProvider;
         [NotNull] private Func<IMigration, string> _nameProvider;
-        [NotNull] private Func<IDatabaseSyntax, MigrationHistoryTableDefinition> _historyTableProvider;
+        [NotNull] private Func<MigrationHistoryTableDefinition, MigrationHistoryTableDefinition> _historyTableOverride;
 
         public MigrationConfiguration() {
             MigrationProvider = DefaultMigrationProvider;
-            HistoryTableProvider = database => {
-                // ReSharper disable once AssignNullToNotNullAttribute
-                Argument.NotNull("database", database);
-                return ((IDefaultHistoryTableDefinitionProvider)database).GetDefaultHistoryTableDefinition();
-            };
+            HistoryTableOverride = @default => @default;
 
             VersionProvider = migration => {
                 // ReSharper disable once AssignNullToNotNullAttribute
@@ -61,9 +55,9 @@ namespace LightMigrator.Framework {
         }
 
         [NotNull]
-        public Func<IDatabaseSyntax, MigrationHistoryTableDefinition> HistoryTableProvider {
-            get { return _historyTableProvider; }
-            protected set { _historyTableProvider = Argument.NotNull("value", value); }
+        public Func<MigrationHistoryTableDefinition, MigrationHistoryTableDefinition> HistoryTableOverride {
+            get { return _historyTableOverride; }
+            protected set { _historyTableOverride = Argument.NotNull("value", value); }
         }
 
         [NotNull]
