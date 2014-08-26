@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using LightMigrator.Framework.Conventions;
+using LightMigrator.Framework;
 using LightMigrator.Framework.FluentInterface;
 
-namespace LightMigrator.Engine {
-    public abstract class VersionRepositoryBase : IVersionRepository {
+namespace LightMigrator.Engine.Internal {
+    public abstract class MigrationHistoryRepositoryBase : IMigrationHistoryRepository {
         [NotNull] protected IDatabase Database { get; private set; }
-        [NotNull] protected IVersionTableDefinition TableDefinition { get; private set; }
+        [NotNull] protected MigrationHistoryTableDefinition TableDefinition { get; private set; }
         [NotNull] protected ITableSyntax Table { get; private set; }
 
-        protected VersionRepositoryBase([NotNull] IDatabase database, [NotNull] IVersionTableDefinition tableDefinition) {
+        protected MigrationHistoryRepositoryBase([NotNull] IDatabase database, [NotNull] MigrationHistoryTableDefinition tableDefinition) {
             Database = Argument.NotNull("database", database);
             TableDefinition = Argument.NotNull("tableDefinition", tableDefinition);
 
@@ -28,7 +28,7 @@ namespace LightMigrator.Engine {
             Database.ExecuteScript(TableDefinition.CreateScript);
         }
 
-        public abstract IReadOnlyCollection<string> GetAllVersions();
-        public abstract void SaveVersion(MigrationInfo migrationInfo);
+        public abstract IReadOnlyCollection<string> GetVersions();
+        public abstract void Save(MigrationInfo info);
     }
 }

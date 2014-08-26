@@ -32,9 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Argument, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Argument, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\#packages\Argument.1.0.2\lib\net45\Argument.dll</HintPath>
+      <HintPath>..\#packages\Argument.1.0.3\lib\net45\Argument.dll</HintPath>
     </Reference>
     <Reference Include="AshMind.Extensions, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -59,23 +59,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\MigrationInfo.cs" />
+    <Compile Include="MigrationGroup.cs" />
     <Compile Include="MigrationScope.cs" />
     <Compile Include="IDatabase.cs" />
     <Compile Include="IRollbackPlan.cs" />
-    <Compile Include="IVersionTableDefinition.cs" />
     <Compile Include="NaiveMultiRollbackPlan.cs" />
     <Compile Include="TransactionScopeRollbackPlan.cs" />
-    <Compile Include="ConventionBasedMigrationPlanner.cs" />
     <Compile Include="IMigrationRunner.cs" />
-    <Compile Include="MigrationNameConvention.cs" />
-    <Compile Include="IDiscovery.cs" />
-    <Compile Include="IMigrationPlanner.cs" />
-    <Compile Include="IVersionRepository.cs" />
+    <Compile Include="Internal\IMigrationHistoryRepository.cs" />
     <Compile Include="IMigrationScope.cs" />
     <Compile Include="MigrationRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectionDiscovery.cs" />
-    <Compile Include="VersionRepositoryBase.cs" />
+    <Compile Include="Internal\MigrationHistoryRepositoryBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

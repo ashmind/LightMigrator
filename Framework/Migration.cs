@@ -11,7 +11,7 @@ namespace LightMigrator.Framework {
             Database = context.Databases[context.PrimaryDatabaseName];
             Migrate();
         }
-
+        
         protected abstract void Migrate();
 
         [NotNull] protected IDatabaseSyntax Database { get; private set; }

@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using LightMigrator.Engine;
-using LightMigrator.Framework.Conventions;
+using LightMigrator.Engine.Internal;
+using LightMigrator.Framework;
 
 namespace LightMigrator.SqlServer {
-    public class SqlServerVersionRepository : VersionRepositoryBase {
-        public SqlServerVersionRepository([NotNull] IDatabase database, [NotNull] IVersionTableDefinition tableDefinition) : base(database, tableDefinition) {
+    public class SqlServerHistoryRepository : MigrationHistoryRepositoryBase {
+        public SqlServerHistoryRepository([NotNull] IDatabase database, [NotNull] MigrationHistoryTableDefinition tableDefinition)
+            : base(database, tableDefinition) {
         }
 
-        public override IReadOnlyCollection<string> GetAllVersions() {
+        public override IReadOnlyCollection<string> GetVersions() {
             // ReSharper disable once PossibleNullReferenceException
-            return Database.ExecuteReader("SELECT " + TableDefinition.VersionColumnName + " FROM " + Table.FullNameEscaped, reader => reader.GetString(0)).ToList().AsReadOnly();
+            return Database.ExecuteReader("SELECT " + TableDefinition.VersionColumnName + " FROM " + Table.FullNameEscaped, reader => reader.GetString(0))
+                           .ToList().AsReadOnly();
         }
 
-        public override void SaveVersion(MigrationInfo migrationInfo) {
-            Argument.NotNull("migrationInfo", migrationInfo);
+        public override void Save(MigrationInfo info) {
+            Argument.NotNull("info", info);
 
             var columnsAndValues = new Dictionary<string, string> {{TableDefinition.VersionColumnName, "@Version"}};
             if (TableDefinition.NameColumnName != null)
@@ -31,8 +34,8 @@ namespace LightMigrator.SqlServer {
             var columnsSql = string.Join(", ", columnsAndValues.Keys.Select(k => "[" + k + "]"));
             var valuesSql = string.Join(", ", columnsAndValues.Values);
             var sql = "INSERT INTO " + Table.FullNameEscaped + " ( " + columnsSql + " ) VALUES ( " + valuesSql + " )";
-            
-            Database.ExecuteNonQuery(sql, new { migrationInfo.GetType().Name, migrationInfo.Version });
+
+            Database.ExecuteNonQuery(sql, new { info.Version, info.Name });
         }
     }
 }

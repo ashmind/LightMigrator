@@ -5,7 +5,7 @@ using LightMigrator.Framework;
 
 namespace LightMigrator.Engine {
     public interface IMigrationRunner {
-        void RunAll(params Assembly[] assemblies);
-        void RunAll([NotNull] IEnumerable<IMigration> migrations);
+        void Run([NotNull] Assembly assembly = null);
+        void Run([NotNull] MigrationConfiguration configuration, [CanBeNull] Assembly assembly = null);
     }
 }

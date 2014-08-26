@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using LightMigrator.Engine;
 using LightMigrator.Framework;
 using LightMigrator.Framework.FluentInterface;
+using LightMigrator.Framework.Internal;
 
 namespace LightMigrator.SqlServer {
     [PublicAPI]
@@ -155,5 +156,13 @@ namespace LightMigrator.SqlServer {
                 command.Parameters.Add(parameter);
             }
         }
+
+        #region IDefaultHistoryTableDefinitionProvider Members
+
+        MigrationHistoryTableDefinition IDefaultHistoryTableDefinitionProvider.GetDefaultHistoryTableDefinition() {
+            return new SqlServerHistoryTableDefinition();
+        }
+
+        #endregion
     }
 }

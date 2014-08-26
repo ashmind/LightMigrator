@@ -4,60 +4,129 @@ using System.Linq;
 using System.Reflection;
 using AshMind.Extensions;
 using JetBrains.Annotations;
+using LightMigrator.Engine.Internal;
 using LightMigrator.Framework;
 using Serilog;
 
 namespace LightMigrator.Engine {
+    [PublicAPI]
     public class MigrationRunner : IMigrationRunner {
-        [NotNull] private readonly IDiscovery _discovery;
-        [NotNull] private readonly IMigrationPlanner _planner;
         [NotNull] private readonly Func<IMigrationScope> _scopeFactory;
-        [NotNull] private readonly IVersionRepository _runRepository;
+        [NotNull] private readonly Func<MigrationHistoryTableDefinition, IMigrationHistoryRepository> _historyRepositoryFactory;
         [NotNull] private readonly ILogger _logger;
 
-        public MigrationRunner([NotNull] IDiscovery discovery, [NotNull] IMigrationPlanner planner, [NotNull] Func<IMigrationScope> scopeFactory, [NotNull] IVersionRepository runRepository, [NotNull] ILogger logger) {
-            _discovery = Argument.NotNull("discovery", discovery);
-            _planner = Argument.NotNull("planner", planner);
+        public MigrationRunner(
+            [NotNull] Func<IMigrationScope> scopeFactory,
+            [NotNull] Func<MigrationHistoryTableDefinition, IMigrationHistoryRepository> historyRepositoryFactory,
+            [NotNull] ILogger logger
+        ) {
             _scopeFactory = Argument.NotNull("scopeFactory", scopeFactory);
-            _runRepository = Argument.NotNull("runRepository", runRepository);
+            _historyRepositoryFactory = Argument.NotNull("historyRepositoryFactory", historyRepositoryFactory);
             _logger = Argument.NotNull("logger", logger);
         }
 
-        public void RunAll(params Assembly[] assemblies) {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            RunAll(assemblies.EmptyIfNull().SelectMany(a => _discovery.DiscoverAll<IMigration>(a)));
+        public void Run(Assembly assembly) {
+            Argument.NotNull("assembly", assembly);
+            Run(GetConfiguration(assembly), assembly);
         }
 
-        public void RunAll([NotNull] IEnumerable<IMigration> migrations) {
-            _runRepository.Prepare();
+        public void Run(MigrationConfiguration configuration, Assembly assembly) {
+            Argument.NotNull("configuration", configuration);
+            _logger.Information("Using configuration {configuration}.", configuration);
 
-            var alreadyRun = _runRepository.GetAllVersions().ToSet();
-            var planned = _planner.Plan(migrations);
+            var migrations = configuration.MigrationProvider(assembly);
+            if (migrations == null)
+                LogAndThrow("MigrationConfiguration.MigrationProvider returned null.", "Failed to get migration list.");
 
-            using (var scope = _scopeFactory()) {
-                foreach (var migration in planned) {
-                    // ReSharper disable once PossibleNullReferenceException
-                    if (alreadyRun.Contains(migration.Version)) {
+            Run(migrations, configuration);
+        }
+
+        private void Run([NotNull] IEnumerable<IMigration> migrations, [NotNull] MigrationConfiguration configuration) {
+           using (var scope = _scopeFactory()) {
+                var historyRepository = _historyRepositoryFactory(configuration.HistoryTableProvider(scope.Databases[scope.PrimaryDatabaseName]));
+                historyRepository.Prepare();
+
+                var alreadyRun = historyRepository.GetVersions().ToSet();
+
+                foreach (var migration in migrations) {
+                    if (migration == null) {
+                        _logger.Warning("Migration skipped (null).");
+                        continue;
+                    }
+
+                    var info = GetInfo(migration, configuration);
+
+                    if (alreadyRun.Contains(info.Version)) {
                         _logger.Information("Migration {$migration} skipped (already run).", migration);
                         continue;
                     }
 
-                    _logger.Debug("Migration {$migration} started.", migration);
+                    _logger.Information("Migration {$migration} started.", migration);
                     try {
-                        migration.Migration.Migrate(scope);
+                        // ReSharper disable once AssignNullToNotNullAttribute
+                        migration.Migrate(scope);
                     }
                     catch (Exception ex) {
                         _logger.Error(ex, "Migration {$migration} failed.", migration);
-                        throw new MigrationException("Migration " + migration + " failed: " + ex + ".", ex);
+                        throw new MigrationException("Migration " + migration + " failed: " + ex.Message, ex);
                     }
 
-                    _runRepository.SaveVersion(migration);
+                    historyRepository.Save(info);
                     _logger.Information("Migration {$migration} completed.", migration);
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
                 scope.Complete();
             }
+        }
+
+        [NotNull]
+        protected virtual MigrationConfiguration GetConfiguration([NotNull] Assembly assembly) {
+            var assemblyName = assembly.GetName().Name;
+            // ReSharper disable once AssignNullToNotNullAttribute
+            var types = assembly.GetTypes().Where(t => t.IsSubclassOf<MigrationConfiguration>()).ToArray();
+
+            if (types.Length > 1) {
+                var exceptionMessage = string.Format(
+                    "Found more than one MigrationConfiguration type in '{0}':{1}{2}",
+                    // ReSharper disable once PossibleNullReferenceException
+                    assemblyName, Environment.NewLine, string.Join(Environment.NewLine, types.Select(t => t.FullName))
+                );
+                LogAndThrow(exceptionMessage, "Found more than one configuration in {$assembly}.", assemblyName);
+            }
+
+            if (types.Length == 0)
+                return new MigrationConfiguration();
+
+            try {
+                // ReSharper disable once AssignNullToNotNullAttribute
+                return (MigrationConfiguration)Activator.CreateInstance(types[0]);
+            }
+            catch (Exception ex) {
+                _logger.Error(ex, "Failed to create a configuration for {$assembly}.", assemblyName);
+                throw new MigrationException("Failed to create MigrationConfiguration for " + assemblyName + ": " + ex.Message, ex);
+            }
+        }
+
+        [NotNull]
+        protected virtual MigrationInfo GetInfo([NotNull] IMigration migration, [NotNull] MigrationConfiguration configuration) {
+            var version = configuration.VersionProvider(migration);
+            if (version == null) {
+                LogAndThrow(
+                    "MigrationConfiguration.VersionProvider returned null for " + migration + ".",
+                    "Migration {$migration}: failed to get a version.", migration
+                );
+            }
+
+            var name = configuration.NameProvider(migration);
+            return new MigrationInfo(version) { Name = name };
+        }
+
+        [ContractAnnotation("=>halt")]
+        private void LogAndThrow(string exceptionMesage, string logMessage, params object[] logPropertyValues) {
+            var exception = new MigrationException(exceptionMesage);
+            _logger.Error(exception, logMessage, logPropertyValues);
+            throw exception;
         }
     }
 }
