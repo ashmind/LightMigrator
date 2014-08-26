@@ -59,7 +59,6 @@
     <Compile Include="IMigration.cs" />
     <Compile Include="IMigrationContext.cs" />
     <Compile Include="Conventions\IMigrationConvention.cs" />
-    <Compile Include="Internal\AgentHeisenbug.Annotations.cs" />
     <Compile Include="Internal\EnsureExtensions.cs" />
     <Compile Include="Migration.cs" />
     <Compile Include="Conventions\MigrationInfo.cs" />

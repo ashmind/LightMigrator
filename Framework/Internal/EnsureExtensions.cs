@@ -4,7 +4,6 @@ using System.Linq;
 using JetBrains.Annotations;
 
 namespace LightMigrator.Framework.Internal {
-    [ThreadSafe]
     public static class EnsureExtensions {
         [NotNull]
         public static T NotNull<T>(this T value)

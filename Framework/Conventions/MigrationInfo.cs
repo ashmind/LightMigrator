@@ -4,7 +4,6 @@ using System.Linq;
 using JetBrains.Annotations;
 
 namespace LightMigrator.Framework.Conventions {
-    [ReadOnly]
     public class MigrationInfo {
         [NotNull] public IMigration Migration    { get; private set; }
         [CanBeNull] public string Version        { get; private set; }
